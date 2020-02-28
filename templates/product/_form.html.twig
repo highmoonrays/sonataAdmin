@@ -1,0 +1,27 @@
+{{ form_start(form) }}
+<div class="custom-form">
+    <div class="form-row" >
+        <div class="form-group col-md-4">
+            {{ form_row (form.name) }}
+        </div>
+        <div class="form-group col-md-4">
+            {{ form_row(form.code) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_row(form.description) }}
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            {{ form_row(form.stock) }}
+        </div>
+        <div class="form-group col-md-2">
+            {{ form_row(form.cost) }}
+        </div>
+    </div>
+    <div class="form-group">
+            {{ form_widget(form.isDiscontinued) }}
+        <button class="btn-dark">{{ button_label|default('Save') }}</button>
+    </div>
+</div>
+{{ form_end(form) }}
