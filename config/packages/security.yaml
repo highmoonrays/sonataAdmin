@@ -16,7 +16,10 @@ security:
             security: false
         main:
             anonymous: true
-            provider:
+            form_login: true
+            guard:
+                authenticators:
+                    - App\Security\UserAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
