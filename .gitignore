@@ -19,5 +19,6 @@
 /.web-server-pid
 ###< symfony/web-server-bundle ###
 
-/.idea
+.DS_Store
+.idea
 /mercure

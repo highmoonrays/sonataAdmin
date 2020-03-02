@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Product;
 use App\Service\ImportTool\FileDataValidator;
-use App\Validator\CustomUniqueEntity;
+use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -69,9 +70,7 @@ final class ProductAdmin extends AbstractAdmin
             ->add('name')
             ->add('description')
             ->add('code')
-            ->add('addedAt')
             ->add('discontinuedAt')
-            ->add('timestamp')
             ->add('stock')
             ->add('cost')
             ;
@@ -120,7 +119,9 @@ final class ProductAdmin extends AbstractAdmin
             ->end()
         ;
 
-        if ($errorElement->getSubject()->getCost() < 5 && $errorElement->getSubject()->getStock() < 10) {
+        if ($errorElement->getSubject()->getCost() < FileDataValidator::PRODUCT_RULE_MIN_COST &&
+            $errorElement->getSubject()->getStock() < 10
+        ) {
             $errorElement->with('stock')
                 ->addViolation(
                     'Stock is less than '.FileDataValidator::PRODUCT_RULE_STOCK_MIN_RULE
@@ -128,9 +129,14 @@ final class ProductAdmin extends AbstractAdmin
                 ->end();
         }
 
-        $container = $this->getConfigurationPool()->getContainer();
-        $em = $container->get('doctrine.orm.entity_manager');
-        $foundedObject = $em->getRepository(get_class($errorElement->getSubject()))->findOneByCode($errorElement->getSubject()->getCode());
+//        $container = $this->getConfigurationPool()->getContainer();
+//        $em = $container->get('doctrine.orm.entity_manager');
+
+        $entityName = get_class($errorElement->getSubject());
+
+        $em = $this->modelManager->getEntityManager($entityName);
+        $foundedObject = $em->getRepository($entityName)
+            ->findOneByCode($errorElement->getSubject()->getCode());
 
         if ($foundedObject) {
             if ($errorElement->getSubject()->getId() != $foundedObject->getId()) {
