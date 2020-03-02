@@ -11,11 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Response;
 
- /**
-  * Require ROLE_ADMIN for *every* controller method in this class.
-  *
-  * @IsGranted("ROLE_ADMIN")
-  */
 final class AdminLoginController extends AbstractController
 {
     /**

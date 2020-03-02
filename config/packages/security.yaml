@@ -34,6 +34,7 @@ security:
             guard:
                 authenticators:
                     - App\Security\AdminLoginAuthenticator
+            access_denied_handler: App\Security\AccessDeniedHandler
         main:
             anonymous: true
             form_login: true
@@ -51,5 +52,6 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-#        - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: ROLE_SUPER_ADMIN }
+        - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
+        - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
