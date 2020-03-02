@@ -143,7 +143,6 @@ final class ProductAdmin extends AbstractAdmin
                 ->assertNotBlank()
             ->end()
         ;
-
         $this->productAdminValidator->validate($errorElement, $this->em);
     }
 }
