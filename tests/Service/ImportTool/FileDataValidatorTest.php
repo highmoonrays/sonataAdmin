@@ -61,13 +61,13 @@ class FileDataValidatorTest extends TestCase
                 function ($code) {
                     if (['code' => 'P00050'] === $code) {
                         return new Product(
-                        'Already',
-                        'Existing product, so validation will fail',
-                        'P00050',
-                        10,
-                        20,
-                        true
-                    );
+                            'Already',
+                            'Existing product, so validation will fail',
+                            'P00050',
+                            10,
+                            20,
+                            true
+                        );
                     }
                     return null;
                 }

@@ -35,6 +35,7 @@ class ProductAdminValidator
             ->findOneByCode($errorElement->getSubject()->getCode());
 
         if ($foundedObject) {
+
             if ($errorElement->getSubject()->getId() != $foundedObject->getId()) {
                 $errorElement->with('code')
                     ->addViolation('Product with this code is already existing!')
@@ -43,7 +44,7 @@ class ProductAdminValidator
             }
         }
 
-        if ($entityObject->getStock() === 0) {
+        if ($entityObject->getDiscontinuedAt() || $entityObject->getStock() === 0) {
             $entityObject->setDiscontinuedAt(new \DateTime());
         }
     }
