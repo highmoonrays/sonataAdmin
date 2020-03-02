@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
-use App\Entity\Product;
 use App\Service\ImportTool\FileDataValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -21,6 +20,24 @@ use Symfony\Component\Validator\Constraints\LessThan;
  */
 final class ProductAdmin extends AbstractAdmin
 {
+    /**
+     * @var
+     */
+    private $em;
+
+    /**
+     * ProductAdmin constructor.
+     * @param EntityManagerInterface $em
+     * @param $code
+     * @param $class
+     * @param $baseControllerName
+     */
+    public function __construct($code, $class, $baseControllerName, EntityManagerInterface $em)
+    {
+        $this->em = $em;
+        parent::__construct($code, $class, $baseControllerName);
+    }
+
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -98,7 +115,7 @@ final class ProductAdmin extends AbstractAdmin
      * @param object $object
      * @throws \Exception
      */
-    public function validate(ErrorElement $errorElement, $object)
+    public function validate(ErrorElement $errorElement, $object): void
     {
         $errorElement
             ->with('name')
@@ -111,7 +128,7 @@ final class ProductAdmin extends AbstractAdmin
                 ->assertNotBlank()
             ->end()
             ->with('cost')
-                ->addConstraint(new LessThan(1000))
+                ->addConstraint(new LessThan(FileDataValidator::PRODUCT_RULE_MAX_COST))
                 ->assertNotBlank()
             ->end()
             ->with('stock')
@@ -120,30 +137,34 @@ final class ProductAdmin extends AbstractAdmin
         ;
 
         if ($errorElement->getSubject()->getCost() < FileDataValidator::PRODUCT_RULE_MIN_COST &&
-            $errorElement->getSubject()->getStock() < 10
+            $errorElement->getSubject()->getStock() < FileDataValidator::PRODUCT_RULE_STOCK_MIN_RULE
         ) {
             $errorElement->with('stock')
                 ->addViolation(
                     'Stock is less than '.FileDataValidator::PRODUCT_RULE_STOCK_MIN_RULE
                     .' and cost is less than '. FileDataValidator::PRODUCT_RULE_MIN_COST)
-                ->end();
+                ->end()
+            ;
         }
 
-//        $container = $this->getConfigurationPool()->getContainer();
-//        $em = $container->get('doctrine.orm.entity_manager');
+        $entityObject = $errorElement->getSubject();
+        $entityName = get_class($entityObject);
 
-        $entityName = get_class($errorElement->getSubject());
-
-        $em = $this->modelManager->getEntityManager($entityName);
-        $foundedObject = $em->getRepository($entityName)
+        $foundedObject = $this->em->getRepository($entityName)
             ->findOneByCode($errorElement->getSubject()->getCode());
 
         if ($foundedObject) {
+
             if ($errorElement->getSubject()->getId() != $foundedObject->getId()) {
                 $errorElement->with('code')
                     ->addViolation('Product with this code is already existing!')
-                    ->end();
+                    ->end()
+                ;
             }
+        }
+
+        if ($entityObject->getStock() === 0) {
+            $entityObject->setDiscontinuedAt(new \DateTime());
         }
     }
 }
