@@ -22,6 +22,7 @@
             <a class="active" href="{{ path('changePassword') }}">Change Password</a>
             <a class="active" href={{ path('sonata_admin_dashboard') }}>Log as Admin</a>
             <a class="active" href={{ path('app_logout') }}>Log out</a>
+            <a class="active">You logged as {{ app.user.email }}</a>
         </div>
         {% endblock %}
         <title>{% block title %}Welcome!{% endblock %}</title>
