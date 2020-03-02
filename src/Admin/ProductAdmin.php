@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Service\Admin\ProductAdminValidator;
 use App\Service\ImportTool\FileDataValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -26,16 +27,23 @@ final class ProductAdmin extends AbstractAdmin
     private $em;
 
     /**
+     * @var ProductAdminValidator
+     */
+    private $productAdminValidator;
+
+    /**
      * ProductAdmin constructor.
-     * @param EntityManagerInterface $em
      * @param $code
      * @param $class
      * @param $baseControllerName
+     * @param EntityManagerInterface $em
+     * @param ProductAdminValidator $productAdminValidator
      */
-    public function __construct($code, $class, $baseControllerName, EntityManagerInterface $em)
+    public function __construct($code, $class, $baseControllerName, EntityManagerInterface $em, ProductAdminValidator $productAdminValidator)
     {
         $this->em = $em;
         parent::__construct($code, $class, $baseControllerName);
+        $this->productAdminValidator = $productAdminValidator;
     }
 
     /**
@@ -136,35 +144,6 @@ final class ProductAdmin extends AbstractAdmin
             ->end()
         ;
 
-        if ($errorElement->getSubject()->getCost() < FileDataValidator::PRODUCT_RULE_MIN_COST &&
-            $errorElement->getSubject()->getStock() < FileDataValidator::PRODUCT_RULE_STOCK_MIN_RULE
-        ) {
-            $errorElement->with('stock')
-                ->addViolation(
-                    'Stock is less than '.FileDataValidator::PRODUCT_RULE_STOCK_MIN_RULE
-                    .' and cost is less than '. FileDataValidator::PRODUCT_RULE_MIN_COST)
-                ->end()
-            ;
-        }
-
-        $entityObject = $errorElement->getSubject();
-        $entityName = get_class($entityObject);
-
-        $foundedObject = $this->em->getRepository($entityName)
-            ->findOneByCode($errorElement->getSubject()->getCode());
-
-        if ($foundedObject) {
-
-            if ($errorElement->getSubject()->getId() != $foundedObject->getId()) {
-                $errorElement->with('code')
-                    ->addViolation('Product with this code is already existing!')
-                    ->end()
-                ;
-            }
-        }
-
-        if ($entityObject->getStock() === 0) {
-            $entityObject->setDiscontinuedAt(new \DateTime());
-        }
+        $this->productAdminValidator->validate($errorElement, $this->em);
     }
 }
