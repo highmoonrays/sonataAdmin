@@ -18,8 +18,8 @@
             <a class="active" href="{{ path('products') }}">All products</a>
             <a class="active" href="{{ path('app_login') }}">Log In</a>
             <a class="active" href="{{ path('app_register') }}">Sign Up!</a>
-            <a class="active" href="{{ path('app_logout') }}">Logout</a>
-            <a class="active" href="https://localhost:8000/admin/dashboard">Admin</a>
+            <a class="active" href="{{ path('changePassword') }}">Change Password</a>
+            <a class="active" href={{ path('sonata_admin_dashboard') }}>Admin</a>
         </div>
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}

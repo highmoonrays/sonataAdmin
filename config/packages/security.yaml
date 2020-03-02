@@ -38,6 +38,8 @@ security:
         main:
             anonymous: true
             form_login: true
+            logout:
+                path: logout
             guard:
                 authenticators:
                     - App\Security\UserAuthenticator
