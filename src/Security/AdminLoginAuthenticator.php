@@ -57,7 +57,9 @@ final class AdminLoginAuthenticator extends AbstractFormLoginAuthenticator imple
      */
     public function supports(Request $request): bool
     {
-        if ($request->getPathInfo() != '/admin/login' || $request->getMethod() != 'POST') {
+        if ($request->getPathInfo() !== $this->router->generate('admin_login') ||
+            $request->getMethod() !== 'POST'
+        ) {
             return false;
         }
 
@@ -66,7 +68,7 @@ final class AdminLoginAuthenticator extends AbstractFormLoginAuthenticator imple
 
     /**
      * @param Request $request
-     * @return array
+     * @return array|null
      */
     public function getCredentials(Request $request): array
     {
@@ -78,7 +80,6 @@ final class AdminLoginAuthenticator extends AbstractFormLoginAuthenticator imple
             Security::LAST_USERNAME,
             $data['email']
         );
-
         return $data;
     }
 

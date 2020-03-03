@@ -23,12 +23,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserController extends AbstractController
 {
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
     /**
      * @var ObjectManager
      */
@@ -36,13 +30,11 @@ class UserController extends AbstractController
 
     /**
      * UserController constructor.
-     * @param UserRepository $userRepository
      * @param EntityManagerInterface $em
      */
-    public function __construct(UserRepository $userRepository, EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->userRepository = $userRepository;
     }
 
     /**
@@ -52,7 +44,7 @@ class UserController extends AbstractController
     public function index(): Response
     {
         return $this->render('user/index.html.twig', [
-            'users' => $this->userRepository->findAll(),
+            'users' => $this->em->getRepository(User::class)->findAll(),
         ]);
     }
 
@@ -140,7 +132,7 @@ class UserController extends AbstractController
     public function changePassword(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         if ($this->getUser()) {
-            $user = $this->userRepository->findOneById($this->getUser()->getId());
+            $user = $this->em->getRepository(User::class)->findOneById($this->getUser()->getId());
             $form = $this->createForm(ChangePasswordType::class);
             $form->handleRequest($request);
 
