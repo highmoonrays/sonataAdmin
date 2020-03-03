@@ -12,6 +12,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 final class UserAdmin extends AbstractAdmin
 {
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -22,6 +25,9 @@ final class UserAdmin extends AbstractAdmin
             ;
     }
 
+    /**
+     * @param ListMapper $listMapper
+     */
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -38,6 +44,9 @@ final class UserAdmin extends AbstractAdmin
             ]);
     }
 
+    /**
+     * @param FormMapper $formMapper
+     */
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
@@ -48,6 +57,9 @@ final class UserAdmin extends AbstractAdmin
             ;
     }
 
+    /**
+     * @param ShowMapper $showMapper
+     */
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper

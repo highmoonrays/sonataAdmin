@@ -21,8 +21,9 @@ use Symfony\Component\Validator\Constraints\LessThan;
  */
 final class ProductAdmin extends AbstractAdmin
 {
+
     /**
-     * @var
+     * @var EntityManagerInterface
      */
     private $em;
 
@@ -39,8 +40,13 @@ final class ProductAdmin extends AbstractAdmin
      * @param EntityManagerInterface $em
      * @param ProductAdminValidator $productAdminValidator
      */
-    public function __construct($code, $class, $baseControllerName, EntityManagerInterface $em, ProductAdminValidator $productAdminValidator)
-    {
+    public function __construct(
+        $code,
+        $class,
+        $baseControllerName,
+        EntityManagerInterface $em,
+        ProductAdminValidator $productAdminValidator
+    ) {
         $this->em = $em;
         parent::__construct($code, $class, $baseControllerName);
         $this->productAdminValidator = $productAdminValidator;
