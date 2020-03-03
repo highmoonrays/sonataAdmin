@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Products{% endblock %}
+
+{% block body %}
+    <h1>Products</h1>
+    <a href="{{ path('createNewProduct') }}">Create new</a>
+    {% for product in products %}
+        <br>
+        <div class="row">
+            <div class="col">
+                <p> Id </p>
+                <p>{{ product.id }}</p>
+            </div>
+            <div class="col">
+                <p> Name </p>
+                <p>{{ product.name }}</p>
+            </div>
+            <div class="col">
+                <p> Description </p>
+                <p>{{ product.description }}</p>
+            </div>
+            <div class="col">
+                <p> Product Code </p>
+                <p>{{ product.code }}</p>
+            </div>
+            <div class="col">
+                <p> Added at </p>
+                <p>{{ product.addedAt ? product.addedAt|date('Y-m-d H:i:s') : '' }}</p>
+            </div>
+            <div class="col">
+                <p> Timestamp </p>
+                <p>{{ product.timestamp ? product.timestamp|date('Y-m-d H:i:s') : '' }}</p>
+            </div>
+            <div class="col">
+                <p> Discontinued at </p>
+                <p>{{ product.discontinuedAt ? product.discontinuedAt|date('Y-m-d H:i:s') : '' }}</p>
+            </div>
+            <div class="col">
+                <p> Stock </p>
+                <p>{{ product.stock }}</p>
+            </div>
+            <div class="col">
+                <p> Cost </p>
+                <p>{{ product.cost }}</p>
+            </div>
+            <div class="col">
+                <p> Actions: </p>
+                <a href="{{ path('showProduct', {'id': product.id}) }}">Show </a>
+                <a href="{{ path('editProduct', {'id': product.id}) }}">Edit </a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

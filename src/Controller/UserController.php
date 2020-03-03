@@ -5,27 +5,45 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ChangePasswordType;
 use App\Form\UserType;
-use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
+ * Class UserController
+ * @package App\Controller
  * @Route("/user")
  */
 class UserController extends AbstractController
 {
     /**
+     * @var ObjectManager
+     */
+    private $em;
+
+    /**
+     * UserController constructor.
+     * @param EntityManagerInterface $em
+     */
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
+    /**
      * @Route("/", name="user_index", methods={"GET"})
-     * @param UserRepository $userRepository
      * @return Response
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(): Response
     {
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $this->em->getRepository(User::class)->findAll(),
         ]);
     }
 
@@ -41,9 +59,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $this->em->persist($user);
+            $this->em->flush();
 
             return $this->redirectToRoute('user_index');
         }
@@ -78,7 +95,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->em->flush();
 
             return $this->redirectToRoute('user_index');
         }
@@ -98,11 +115,46 @@ class UserController extends AbstractController
     public function delete(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
+            $this->em->remove($user);
+            $this->em->flush();
         }
 
         return $this->redirectToRoute('user_index');
+    }
+
+    /**
+     * @Route("profile/changePassword/", name="changePassword", methods={"GET", "POST"})
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return Response
+     */
+    public function changePassword(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        if ($this->getUser()) {
+            $user = $this->em->getRepository(User::class)->findOneById($this->getUser()->getId());
+            $form = $this->createForm(ChangePasswordType::class);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                // encode the plain password
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+                $this->em->flush();
+
+                $this->addFlash('changePassword', 'Success!');
+            }
+        } else {
+            $this->addFlash('changePassword', 'First you have to log in!');
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('user/changePassword.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home page{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <div class="form-group col-md-3">
+        {{ form_widget(form) }}
+        <button class="btn-dark" onclick="alert('Process has been started!')">{{ button_label|default('Create') }}</button>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
