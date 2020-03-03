@@ -17,6 +17,10 @@ final class AdminLoginController extends AbstractController
      */
     private $authenticationUtils;
 
+    /**
+     * AdminLoginController constructor.
+     * @param AuthenticationUtils $authenticationUtils
+     */
     public function __construct(AuthenticationUtils $authenticationUtils)
     {
         $this->authenticationUtils = $authenticationUtils;
