@@ -9,7 +9,6 @@ security:
             - ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\User
@@ -37,10 +36,15 @@ security:
             access_denied_handler: App\Security\AccessDeniedHandler
         main:
             anonymous: true
+            saml:
+                username_attribute: uid
+                check_path: /saml/acs
+                login_path: /saml/login
+                failure_path: /login
+                always_use_default_target_path: true
             form_login: true
             logout:
-                path: app_logout
-                target: app_login
+                path: /saml/logout
             guard:
                 authenticators:
                     - App\Security\UserAuthenticator
@@ -59,4 +63,4 @@ security:
         - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, role: ROLE_USER}
+#        - { path: ^/, role: ROLE_USER}
