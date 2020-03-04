@@ -134,7 +134,6 @@ class User implements UserInterface, SamlUserInterface
         return $this;
     }
 
-
     /**
      * @param array $attributes
      */
@@ -181,6 +180,10 @@ class User implements UserInterface, SamlUserInterface
         return $this;
     }
 
+    /**
+     * @param string $username
+     * @return $this
+     */
     public function setUsername(string $username): self
     {
         $this->username = $username;

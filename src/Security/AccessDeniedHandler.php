@@ -16,7 +16,7 @@ class AccessDeniedHandler implements AccessDeniedHandlerInterface
      * @param AccessDeniedException $accessDeniedException
      * @return Response|null
      */
-    public function handle(Request $request, AccessDeniedException $accessDeniedException)
+    public function handle(Request $request, AccessDeniedException $accessDeniedException): ?Response
     {
         $accessDeniedMessage = 'Your access is too low pal!';
         return new Response($accessDeniedMessage, 403);

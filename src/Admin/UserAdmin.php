@@ -50,9 +50,7 @@ final class UserAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('id')
             ->add('email')
-            ->add('roles')
             ->add('password')
             ;
     }

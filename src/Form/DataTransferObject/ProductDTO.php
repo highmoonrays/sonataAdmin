@@ -74,10 +74,10 @@ class ProductDTO
     private $cost;
 
     /**
-     * @param object $product
+     * @param Product $product
      * @return ProductDTO|null
      */
-    public static function createDTOFromProduct(object $product): ?ProductDTO
+    public static function createDTOFromProduct(Product $product): ?ProductDTO
     {
         $productDTO = new ProductDTO();
         $productDTO->setId($product->getId());

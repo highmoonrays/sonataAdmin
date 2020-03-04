@@ -9,6 +9,7 @@ use App\Service\Processor\ImportProcessor;
 use App\Service\Processor\ProductCreator;
 use App\Service\Reporter\FileImportReporter;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Mercure\PublisherInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -69,7 +70,7 @@ class ProductDataMessageHandler implements MessageHandlerInterface
 
     /**
      * @param ProductDataMessage $productDataMessage
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(ProductDataMessage $productDataMessage): void
     {
