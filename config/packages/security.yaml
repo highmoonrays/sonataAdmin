@@ -9,11 +9,12 @@ security:
             - ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
+        user_provider:
+            # Loads user from user repository
             entity:
-                class: App\Entity\User
-                property: email
+                class: App:User
+                property: username
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -22,7 +23,7 @@ security:
         admin:
             pattern:            /admin(.*)
             form_login:
-                provider:       app_user_provider
+                provider:       user_provider
                 login_path:     admin_login
                 use_forward:    false
                 check_path:     admin_login
@@ -36,14 +37,26 @@ security:
                     - App\Security\AdminLoginAuthenticator
             access_denied_handler: App\Security\AccessDeniedHandler
         main:
-            anonymous: true
-            form_login: true
+            anonymous: ~
+            saml:
+                username_attribute: User.email
+                check_path: /saml/acs
+                login_path: /saml/login
+                failure_path: /login
+                always_use_default_target_path: true
+                # User factory service
+                user_factory: my_user_factory
+                # Persist new user. Doctrine is required.
+                persist_user: true
+
+            # Traditional login form
+            form_login:
+                login_path: /login
+                check_path: /login_check
+                always_use_default_target_path: true
+
             logout:
-                path: app_logout
-                target: app_login
-            guard:
-                authenticators:
-                    - App\Security\UserAuthenticator
+                path: /saml/logout
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -58,5 +71,6 @@ security:
         - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, role: ROLE_USER}
+        - { path: ^/saml/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/saml/metadata, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_USER }

@@ -39,7 +39,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/", name="products", methods={"GET"})
+     * @Route("/", name="products", methods={"GET", "POST"})
      * @param ProductRepository $productRepository
      * @return Response
      */
