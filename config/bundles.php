@@ -21,5 +21,4 @@ return [
     Sonata\AdminBundle\SonataAdminBundle::class => ['all' => true],
     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
     Symfony\Bundle\MercureBundle\MercureBundle::class => ['all' => true],
-    Hslavich\OneloginSamlBundle\HslavichOneloginSamlBundle::class => ['all' => true],
 ];
