@@ -51,4 +51,13 @@ services:
         public: true
 
     my_user_factory:
-        class: App\Security\UserFactory
+        class: Hslavich\OneloginSamlBundle\Security\User\SamlUserFactory
+        arguments:
+            # User class
+            - App\Entity\User
+            # Attribute mapping.
+            - password: 'notused'
+              email: $User.email
+              name: $User.FirstName
+              lastname: $User.LastName
+              roles: ["ROLE_USER"]

@@ -7,13 +7,49 @@ hslavich_onelogin_saml:
     singleLogoutService:
       url: 'https://highmoonrays-dev.onelogin.com/trust/saml2/http-redirect/slo/1091479'
       binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
-    x509cert: 'EA:FD:39:50:57:81:D6:A7:D7:31:3C:ED:B2:C3:0F:7E:C8:F2:F4:9D'
+    x509cert: 'MIID6zCCAtOgAwIBAgIUdtjfjeeRe6xhOLIQ9X9j8rwbE+4wDQYJKoZIhvcNAQEF
+               BQAwSjEVMBMGA1UECgwMaGlnaG1vb25yYXlzMRUwEwYDVQQLDAxPbmVMb2dpbiBJ
+               ZFAxGjAYBgNVBAMMEU9uZUxvZ2luIEFjY291bnQgMB4XDTIwMDMwMzEzMDAxMFoX
+               DTI1MDMwMzEzMDAxMFowSjEVMBMGA1UECgwMaGlnaG1vb25yYXlzMRUwEwYDVQQL
+               DAxPbmVMb2dpbiBJZFAxGjAYBgNVBAMMEU9uZUxvZ2luIEFjY291bnQgMIIBIjAN
+               BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyJMmPLqicKqL0ARndwvKF0qV447J
+               bwROVTiglUcdqj+DwnUtKJXz3cKaoaDX5i1asscIvoMmDsCp6u1GwlcJu7nkcTRQ
+               Di6RfRiguWIxKTVad9lN5ABLizJEiQo8Skyic+tIA8/BRtJmbB6qnkboHPn/ssCV
+               SqNDqt2OEBQ6Al95oy0l1pThB7ttiOntKTrbU6diqmKMZltptSuatDYtFjB2nRLq
+               5l3Rr69ObuU6vEnfJDDs+WnzII5b4PYz9UB4hwBfsp5CC3aIjfGOg7gcM2BYbZ47
+               AEuDkzG9FUi7OyLe0D8FRQHB4sMCBsMNh0O9vkOtNARfmmtGUGXvI2zwsQIDAQAB
+               o4HIMIHFMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYEFOvBJEABoEBaSTudTDR6dmhu
+               3A+CMIGFBgNVHSMEfjB8gBTrwSRAAaBAWkk7nUw0enZobtwPgqFOpEwwSjEVMBMG
+               A1UECgwMaGlnaG1vb25yYXlzMRUwEwYDVQQLDAxPbmVMb2dpbiBJZFAxGjAYBgNV
+               BAMMEU9uZUxvZ2luIEFjY291bnQgghR22N+N55F7rGE4shD1f2PyvBsT7jAOBgNV
+               HQ8BAf8EBAMCB4AwDQYJKoZIhvcNAQEFBQADggEBAJ8PbFpaqSWp2N9pFY4o6NA7
+               n/GnPGBXRQGrLH9XSfFAsx4Yu7tqPrnfQcxOn9b4YidACjwI6lPnv9eXXn1+ZOAs
+               Cf+BTXIdxho8lUEuoggH62+fgRso1xWHK05e4EEo9fNveHW8kAVlYoozXt3squKY
+               IJ6t47aA1yPibspNuAMReODQ+L8NgtoshFXwjMGuok4N/g+f+NnBb/IzvGCtHIxn
+               7q4a+rdH96TZmo6pZM4JIDLnl0smY4noLpvANHYrQiq031MfxAT04iiSbZn435Xl
+               /KbqrwBw7oRXt1lefM2+05VLgyK/FCUMXcDXRv/RBKoR1ouMWio6eK7/QMJ+LGY='
   sp:
-    entityId: 'http://localhost:8000/app_dev.php/saml/metadata'
+    entityId: 'http://localhost:8000/saml/metadata'
     assertionConsumerService:
-      url: 'http://localhost:8000/'
+      url: 'http://localhost:8000/saml/acs'
       binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
     singleLogoutService:
-      url: 'http://localhost:8000/logout'
+      url: 'http://localhost:8000/saml/logout'
       binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
     privateKey: ''
+  baseurl: 'http://localhost:8000'
+  strict: true
+  debug: true
+  security:
+    nameIdEncrypted:       false
+    authnRequestsSigned:   false
+    logoutRequestSigned:   false
+    logoutResponseSigned:  false
+    wantMessagesSigned:    false
+    wantAssertionsSigned:  false
+    wantNameIdEncrypted:   false
+    requestedAuthnContext: true
+    signMetadata: false
+    wantXMLValidation: true
+    signatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256'
+    digestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256'
