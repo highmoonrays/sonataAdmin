@@ -49,3 +49,15 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Product }
         public: true
+
+    my_user_factory:
+        class: Hslavich\OneloginSamlBundle\Security\User\SamlUserFactory
+        arguments:
+            # User class
+            - App\Entity\User
+            # Attribute mapping.
+            - password: 'notused'
+              email: $User.email
+              name: $User.FirstName
+              lastname: $User.LastName
+              roles: ["ROLE_USER"]
