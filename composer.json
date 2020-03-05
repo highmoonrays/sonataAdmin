@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "php-amqplib/rabbitmq-bundle": "^1.14",
+        "hslavich/oneloginsaml-bundle": "^1.5",
         "phpoffice/phpspreadsheet": "^1.10",
         "sensio/framework-extra-bundle": "^5.5",
         "sonata-project/admin-bundle": "^3.61",

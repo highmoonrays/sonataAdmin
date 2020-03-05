@@ -26,9 +26,24 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
+    /**
+     * @var EntityManagerInterface
+     */
     private $entityManager;
+
+    /**
+     * @var UrlGeneratorInterface
+     */
     private $urlGenerator;
+
+    /**
+     * @var CsrfTokenManagerInterface
+     */
     private $csrfTokenManager;
+
+    /**
+     * @var UserPasswordEncoderInterface
+     */
     private $passwordEncoder;
 
     /**
@@ -106,7 +121,7 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
      * @param UserInterface $user
      * @return bool
      */
-    public function checkCredentials($credentials, UserInterface $user)
+    public function checkCredentials($credentials, UserInterface $user): bool
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }

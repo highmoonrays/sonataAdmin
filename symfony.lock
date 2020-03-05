@@ -99,6 +99,9 @@
     "fig/link-util": {
         "version": "1.1.0"
     },
+    "hslavich/oneloginsaml-bundle": {
+        "version": "v1.5.0"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -134,6 +137,9 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.7.0"
+    },
+    "onelogin/php-saml": {
+        "version": "3.4.1"
     },
     "php": {
         "version": "7.4"
@@ -179,6 +185,9 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "robrichards/xmlseclibs": {
+        "version": "3.0.4"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Hslavich\OneloginSamlBundle\Security\User\SamlUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -12,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User implements UserInterface
+class User implements UserInterface, SamlUserInterface
 {
     /**
      * @ORM\Id()
@@ -21,6 +22,21 @@ class User implements UserInterface
      * @var int
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $lastname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $username;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -119,19 +135,75 @@ class User implements UserInterface
     }
 
     /**
-     * @see UserInterface
+     * @param array $attributes
      */
-    public function getSalt()
+    public function setSamlAttributes(array $attributes)
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        $this->email = $attributes['User.email'][0];
     }
 
     /**
-     * @see UserInterface
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     * @return $this
+     */
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string|null $lastname
+     * @return $this
+     */
+    public function setLastname(?string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * @param string $username
+     * @return $this
+     */
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    /**
+     * @inheritDoc
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // TODO: Implement eraseCredentials() method.
     }
 }
